@@ -1,21 +1,32 @@
+open System
 
-module eulerProblem1A =
-    
-    open System
-    
-    let sumUptoN (n:int64) (a:int64) =        
-        a * n * (n + 1L) / 2L
 
-    // [<EntryPoint>]
-    let main argv =
-            let t = Console.ReadLine() |> int64
-            for _ in 1L .. t do
-                // get long value
-                let n = Console.ReadLine() |> int64
-                let sum3 = sumUptoN ((n-1L)/3L) 3L
-                let sum5 = sumUptoN ((n-1L)/5L) 5L
-                let sum15 = sumUptoN ((n-1L)/15L) 15L
-                let result = sum3 + sum5 - sum15
+let sumOfMultipleOfThreeOrFive (endingTerm: int64) : int64 = 
+    let sumationOfAUptoN (endingTerm: int64) (startingTerm: int64) : int64  =
+        let numberOfTerms : int64 = ((endingTerm-1L)/startingTerm)
+        startingTerm * numberOfTerms * (numberOfTerms + 1L) / 2L
+
+    let sumOf3:  int64 = sumationOfAUptoN endingTerm 3L
+    let sumOf5:  int64 = sumationOfAUptoN endingTerm 5L
+    let sumOf15: int64 = sumationOfAUptoN endingTerm 15L
+    sumOf3 + sumOf5 - sumOf15
+
+let main argv =
+    try 
+        let numberOfTestCases = Console.ReadLine() |> int64
+        for testCase in 1L .. numberOfTestCases do
+            try 
+                let input = Console.ReadLine() |> int64
+                let result = sumOfMultipleOfThreeOrFive (int64 input)
                 printfn "%d" result
-            0 // return an integer exit code
-    main [|""|]
+            with 
+                | :? System.FormatException -> printfn "Invalid input"
+                | :? System.OverflowException -> printfn "Invalid input"
+
+    with 
+    | :? System.FormatException -> printfn "Invalid input"
+    | :? System.OverflowException -> printfn "Invalid input"
+
+    0 // return an integer exit code
+
+main [|""|]
