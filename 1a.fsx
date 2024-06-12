@@ -13,26 +13,27 @@ let sumOfMultipleOfThreeOrFive (endingTerm: int64) : int64 =
     let sumOf15: int64 = sumationOfAUptoN endingTerm 15L
     sumOf3 + sumOf5 - sumOf15
 
-let main argv =
+let main args: unit =
     try 
         let numberOfTestCases = Console.ReadLine()|> int64
         if numberOfTestCases < 1L then
             raise (NegativeNumberException "Invalid input")
-        for testCase in 1L .. numberOfTestCases do
-            try 
-                let input = Console.ReadLine() |> int64
-                if input < 1L then
-                    raise (NegativeNumberException "Invalid input")
-                let result = sumOfMultipleOfThreeOrFive (int64 input)
-                printfn "%d" result
-         
 
+        for testCase in 1L .. numberOfTestCases do
+            
+            let input = Console.ReadLine() |> int64
+            if input < 1L then
+                raise (NegativeNumberException "Invalid input")
+            let result = sumOfMultipleOfThreeOrFive (int64 input)
+            printfn "%d" result
+        
     with 
-    | :? System.FormatException -> printfn "Invalid input"
-    | :? System.OverflowException -> printfn "Invalid input"
+    | :? System.FormatException -> printfn "Formatting error has occured"
+    | :? System.OverflowException -> printfn "Overflow occurred"
+    | :? System.IO.IOException -> printfn "An IO exception occurred"
+    | :? System.ArgumentOutOfRangeException -> printfn "Argument out of range exception occurred"
     | :? NegativeNumberException as ex -> printfn "%s" ex.Message
     | _ -> printfn "An error occurred"
 
-    0 // return an integer exit code
 
-main [|""|]
+main [||]
