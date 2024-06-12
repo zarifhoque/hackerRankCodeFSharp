@@ -3,6 +3,13 @@ open System
 
 exception NegativeNumberException of string
 
+
+
+let checkIfNegativeInputint64 (input:int64) :int64 =
+    if input < 0L then
+        raise (NegativeNumberException "The bigint you have passed cannot be negative")
+    input
+
 let sumOfMultipleOfThreeOrFive (endingTerm: int64) : int64 = 
     let sumationOfAUptoN (endingTerm: int64) (startingTerm: int64) : int64  =
         let numberOfTerms: int64 = ((endingTerm-1L)/startingTerm)
@@ -15,7 +22,7 @@ let sumOfMultipleOfThreeOrFive (endingTerm: int64) : int64 =
 
 let main args: unit =
     try 
-        let numberOfTestCases = Console.ReadLine()|> int64
+        let numberOfTestCases = Console.ReadLine()|> int64 |> checkIfNegativeInputint64
         if numberOfTestCases < 1L then
             raise (NegativeNumberException "Invalid input")
 
