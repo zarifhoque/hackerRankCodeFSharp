@@ -17,16 +17,16 @@ let getColumn (array2D: 'a[,]) (colIndex: int) =
     [| for rowIndex in 0 .. array2D.GetLength(0) - 1 -> array2D.[rowIndex, colIndex] |]
 
 
-let rec takeInput (n: int) (arr: int array list) : list<array<int>> = 
-    if n = 0 then arr // base case : if n is 0 return the array of arrays
+let rec takeInput (rowNum: int) (arrayCurr: int array list) : list<array<int>> = 
+    if rowNum = 0 then arrayCurr // base case : if n is 0 return the array of arrays
     else 
         try
             let input = Console.ReadLine().Split([|' '; '\t'|], StringSplitOptions.RemoveEmptyEntries) |> Array.map int |> Array.map checkIfNegativeInputInt  // take input of numbers and map them onto array
-            takeInput (n - 1) (arr @ [input]) // append the input array to the list of arrays
+            takeInput (rowNum - 1) (arrayCurr @ [input]) // append the input array to the list of arrays
         with
         | :? FormatException ->
             printfn "Please enter valid integers separated by spaces or tabs."
-            takeInput n arr
+            takeInput rowNum arrayCurr
 
 // this function converts list of arrays to 2D array
 let listTo2DArray (listOfArrays:int array list) : int[,] =
