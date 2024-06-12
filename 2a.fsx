@@ -4,6 +4,13 @@ open System.Numerics
 
 
 exception NegativeNumberException of string
+let checkIfNegativeInputint64 (input:int64) :int64 =
+    if input < 0L then
+        raise (NegativeNumberException "The int64 you have passed cannot be negative")
+    input
+
+
+
 let fibonacciLookupFor = Dictionary<int64, int64>()  // Store the memoized valeus of the fibonacci numbers here
 
 // Recursive Fibonacci function with memoization
@@ -36,20 +43,15 @@ let getFibonacciValueFOr (index: int64) (typeOfAlgorithm: string) : int64 =
 
 let main args: unit =
     try 
-        let testCaseCount = Console.ReadLine() |> int64
-        if testCaseCount<0L then raise (NegativeNumberException "Negative number")
-        else
-            for testCase in 1L .. testCaseCount do  // Loop for each test case
-                
-                let input = Console.ReadLine() |> int64  // Read input for each case
-                if input<0L then raise (NegativeNumberException "Negative number")
-                else
-        
-                    let sum = Seq.initInfinite (fun index -> getFibonacciValueFOr(int64 index ) "memoized" )  
-                            |> Seq.filter (fun element -> element % 2L = 0L) 
-                            |> Seq.takeWhile (fun element -> element < input)
-                            |> Seq.fold (fun accumulator element -> accumulator + BigInteger(element)) BigInteger.Zero  // BigInteger sum
-                    Console.WriteLine(sum)
+        let testCaseCount: int64 = Console.ReadLine() |> int64 |> checkIfNegativeInputint64
+        for testCase: int64 in 1L .. testCaseCount do  // Loop for each test case
+            
+            let input = Console.ReadLine() |> int64 |> checkIfNegativeInputint64 // Read input for each case
+            let sum = Seq.initInfinite (fun index -> getFibonacciValueFOr(int64 index ) "memoized" )  
+                    |> Seq.filter (fun element -> element % 2L = 0L) 
+                    |> Seq.takeWhile (fun element -> element < input)
+                    |> Seq.fold (fun accumulator (element: int64) -> accumulator + BigInteger(element)) BigInteger.Zero  // BigInteger sum
+            Console.WriteLine(sum)
                 
     with 
     | :? System.IO.IOException -> printfn "Error reading input try again"
